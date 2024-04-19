@@ -24,6 +24,7 @@
 /delete-node/ &gpu_mem;
 /delete-node/ &spss_mem;
 /delete-node/ &cdsp_mem;
+/delete-node/ &rmtfs_mem;
 
 / {
 	model = "Realme X3";
@@ -99,6 +100,14 @@
 			reg = <0x0 0xb7e00000 0x0 0x400000>;
 			record-size = <0x40000>;
 			console-size = <0x40000>;
+		};
+
+		rmtfs_mem: memory@fc201000 {
+			compatible = "qcom,rmtfs-mem";
+			reg = <0 0xfc201000 0 0x200000>;
+			no-map;
+			qcom,client-id = <1>;
+			qcom,vmid = <15>;
 		};
 	};
 
