@@ -32,6 +32,7 @@
 	aliases {
 		serial0 = &uart2;
 		hsuart0 = &uart13;
+		wifi0 = &wifi;
 	};
 
     reserved-memory {
@@ -566,13 +567,18 @@
 	usb-role-switch;
 };
 
-&usb_1_dwc3_hs {
-	remote-endpoint = <&pm8150b_role_switch_in>;
-};
-
 &usb_1_hsphy {
 	vdda-pll-supply = <&vreg_l5a_0p8>;
 	vdda18-supply = <&vreg_l12a_1p8>;
 	vdda33-supply = <&vreg_l2a_3p1>;
 	status = "okay";
+};
+
+&wifi {
+	status = "okay";
+
+	vdd-0.8-cx-mx-supply = <&vreg_l1a_0p75>;
+	vdd-1.8-xo-supply = <&vreg_l7a_1p8>;
+	vdd-1.3-rfa-supply = <&vreg_l2c_1p3>;
+	vdd-3.3-ch0-supply = <&vreg_l11c_3p3>;
 };
