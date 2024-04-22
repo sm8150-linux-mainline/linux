@@ -9,7 +9,7 @@
 #define NT36XXX_H
 
 #define NT36XXX_INPUT_DEVICE_NAME	"Novatek NT36XXX Touch Sensor"
-#define MAX_SPI_FREQ_HZ 8000000
+#define MAX_SPI_FREQ_HZ 15000000
 
 /* FW Param address */
 #define NT36XXX_FW_ADDR		0x01
