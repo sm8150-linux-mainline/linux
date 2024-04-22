@@ -505,6 +505,24 @@
 	firmware-name = "qcom/sm8150/realme/x3/modem.mbn";
 };
 
+&spi17 {
+	status = "okay";
+
+	touchscreen@0 {
+		compatible = "novatek,nt36xxx-spi";
+		reg = <0>;
+
+		spi-max-frequency = <15000000>;
+
+		reset-gpio = <&tlmm 54 GPIO_ACTIVE_HIGH>;
+		irq-gpio = <&tlmm 122 IRQ_TYPE_EDGE_FALLING>;
+
+		panel = <&display_panel>;
+
+		firmware-name = "novatek/novatek_nt36672c_fw.bin";
+	};
+};
+
 &tlmm {
 	gpio-reserved-ranges = <0 4>, <126 4>;
 };
