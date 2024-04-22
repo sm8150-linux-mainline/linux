@@ -607,15 +607,15 @@ static int oppo19696jdi_nt36672c_1080_2400_90fps_unprepare(struct drm_panel *pan
 }
 
 static const struct drm_display_mode oppo19696jdi_nt36672c_1080_2400_90fps_mode = {
-	.clock = (1080 + 124 + 8 + 128) * (2400 + 2528 + 10 + 10) * 60 / 1000,
+	.clock = (1080 + 73 + 12 + 40) * (2400 + 32 + 2 + 30) * 120 / 1000,
 	.hdisplay = 1080,
-	.hsync_start = 1080 + 124,
-	.hsync_end = 1080 + 124 + 8,
-	.htotal = 1080 + 124 + 8 + 128,
+	.hsync_start = 1080 + 73,
+	.hsync_end = 1080 + 73 + 12,
+	.htotal = 1080 + 73 + 12 + 40,
 	.vdisplay = 2400,
-	.vsync_start = 2400 + 2528,
-	.vsync_end = 2400 + 2528 + 10,
-	.vtotal = 2400 + 2528 + 10 + 10,
+	.vsync_start = 2400 + 32,
+	.vsync_end = 2400 + 32 + 2,
+	.vtotal = 2400 + 32 + 2 + 30,
 	.width_mm = 69,
 	.height_mm = 152,
 };
