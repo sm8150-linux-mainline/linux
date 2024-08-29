@@ -151,12 +151,12 @@
 		compatible = "gpio-keys";
 
 		pinctrl-names = "default";
-		pinctrl-0 = <&vol_up_n>;
+		pinctrl-0 = <&vol_down_n>;
 
-		key-vol-up {
-			label = "Volume Up";
-			gpios = <&pm8150_gpios 6 GPIO_ACTIVE_LOW>;
-			linux,code = <KEY_VOLUMEUP>;
+		key-vol-down {
+			label = "Volume Down";
+			gpios = <&pm8150_gpios 7 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_VOLUMEDOWN>;
 			debounce-interval = <15>;
 			linux,can-disable;
 			wakeup-source;
@@ -417,8 +417,8 @@
 };
 
 &pm8150_gpios {
-	vol_up_n: vol-up-n-state {
-		pins = "gpio6";
+	vol_down_n: vol-down-n-state {
+		pins = "gpio7";
 		function = "normal";
 		power-source = <1>;
 		input-enable;
@@ -474,7 +474,7 @@
 };
 
 &pon_resin {
-	linux,code = <KEY_VOLUMEDOWN>;
+	linux,code = <KEY_VOLUMEUP>;
 	status = "okay";
 };
 
