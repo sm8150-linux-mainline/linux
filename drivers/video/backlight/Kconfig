@@ -463,6 +463,11 @@ config BACKLIGHT_ARCXCNN
 	  If you have an ARCxCnnnn family backlight say Y to enable
 	  the backlight driver.
 
+config BACKLIGHT_LM3697
+	bool "LM3697 Backlight"
+	help
+	  lcd backlight for Realme X3.
+
 config BACKLIGHT_RAVE_SP
 	tristate "RAVE SP Backlight driver"
 	depends on RAVE_SP_CORE
