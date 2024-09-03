@@ -149,7 +149,7 @@ static int set_lm3697_backlight_gpio(int value)
 
 	if (gpio_is_valid(pchip->pdata->en_gpio)) {
 		if(value!=pchip->en_gpio_state) {
-			dev_info(&lm3697_i2c_client->dev, "%s: bl_en_gpio = %d, value = %d\n", \
+			dev_dbg(&lm3697_i2c_client->dev, "%s: bl_en_gpio = %d, value = %d\n", \
 					__func__, pchip->pdata->en_gpio, value);
 
 			gpio_direction_output(pchip->pdata->en_gpio, value);
@@ -187,7 +187,7 @@ static int lm3697_dt(struct device *dev, struct lm3697_platform_data *pdata)
 
 	pdata->en_gpio = of_get_named_gpio(np, "ti,bl-enable-gpio", 0);
 
-	dev_info(dev, "%s bl_en_gpio = %d\n", __func__, pdata->en_gpio);
+	dev_dbg(dev, "%s bl_en_gpio = %d\n", __func__, pdata->en_gpio);
 
 	if (!gpio_is_valid(pdata->en_gpio))
 		dev_err(dev, "%s, Backlight_en gpio not specified\n", __func__);
@@ -199,7 +199,7 @@ static int lm3697_chip_init(struct lm3697_bl_chip *pchip)
 {
 	int ret = 0;
 
-	dev_info(&lm3697_i2c_client->dev, "%s\n", __func__);
+	dev_dbg(&lm3697_i2c_client->dev, "%s\n", __func__);
 
 	if (BL_IC_KTD3136 == pchip->ic_type) {
 		ret = regmap_write(pchip->regmap, 0x02, (BL_FULL_SCALE_LED_CURRENT << 3));  //OVP 32V, Freq 500kh
@@ -419,7 +419,7 @@ static int lm3697_wled_update_status(struct backlight_device *bl)
 		}
 	}
 
-	dev_info(&lm3697_i2c_client->dev, "%s, target_brightness = %d, actual_brightness = %d\n", \
+	dev_dbg(&lm3697_i2c_client->dev, "%s, target_brightness = %d, actual_brightness = %d\n", \
 			__func__, bl->props.brightness, pchip->brightness);
 
 	return 0;
@@ -453,7 +453,7 @@ static int lm3697_wled_get_brightness(struct backlight_device *bl)
 	}
 
 	if(!pchip->en_gpio_state) {
-		dev_info(&lm3697_i2c_client->dev, "%s, en_gpio is off.\n", __func__);
+		dev_dbg(&lm3697_i2c_client->dev, "%s, en_gpio is off.\n", __func__);
 		return 0;
 	}
 
@@ -485,7 +485,7 @@ static int lm3697_wled_get_brightness(struct backlight_device *bl)
 
 	bl->props.brightness = pchip->brightness;
 
-	dev_info(&lm3697_i2c_client->dev, "%s, brightness = %d\n", __func__, \
+	dev_dbg(&lm3697_i2c_client->dev, "%s, brightness = %d\n", __func__, \
 			bl->props.brightness);
 
 	return bl->props.brightness;
