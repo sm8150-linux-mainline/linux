@@ -427,6 +427,16 @@
    };
 };
 
+&i2c9 {
+	status = "okay";
+
+	backlight: lm3697-backlight@36 {
+		compatible = "ti,lm3697";
+		reg = <0x36>;
+		ti,bl-enable-gpio = <&pm8150l_gpios 11 GPIO_ACTIVE_HIGH>;
+	};
+};
+
 &pm8150_gpios {
 	vol_down_n: vol-down-n-state {
 		pins = "gpio7";
@@ -708,6 +718,7 @@
             reg = <0>;
 	    vddio-supply = <&vreg_l14a_1p8>;
             reset-gpios = <&tlmm 6 GPIO_ACTIVE_LOW>;
+	    backlight = <&backlight>;
 
             port {
                   panel_in: endpoint {
