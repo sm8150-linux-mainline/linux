@@ -446,6 +446,16 @@
 	};
 };
 
+&i2c15 {
+  	status = "okay";
+
+	bq27411: fuel-gauge@55 {
+		compatible = "ti,bq27411";
+		reg = <0x55>;
+		monitored-battery = <&battery>;
+	};
+};
+
 &pm8150_gpios {
 	vol_down_n: vol-down-n-state {
 		pins = "gpio7";
