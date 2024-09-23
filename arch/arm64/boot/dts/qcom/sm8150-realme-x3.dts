@@ -569,7 +569,7 @@
 };
 
 &sound {
-	compatible = "qcom,sm8250-sndcard";
+	compatible = "qcom,sdm845-sndcard";
 	pinctrl-0 = <&quat_mi2s_active &quat_mi2s_sd0_active
 			   &quat_mi2s_sd1_active &quat_mi2s_mclk_active>;
 	pinctrl-names = "default";
