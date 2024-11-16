@@ -13,7 +13,7 @@
 #include <drm/drm_modes.h>
 #include <drm/drm_panel.h>
 
-struct oppo19696jdi_nt36672c_1080_2400_90fps {
+struct nt36672c {
 	struct drm_panel panel;
 	struct mipi_dsi_device *dsi;
 	struct drm_dsc_config dsc;
@@ -22,12 +22,12 @@ struct oppo19696jdi_nt36672c_1080_2400_90fps {
 };
 
 static inline
-struct oppo19696jdi_nt36672c_1080_2400_90fps *to_oppo19696jdi_nt36672c_1080_2400_90fps(struct drm_panel *panel)
+struct nt36672c *to_nt36672c(struct drm_panel *panel)
 {
-	return container_of(panel, struct oppo19696jdi_nt36672c_1080_2400_90fps, panel);
+	return container_of(panel, struct nt36672c, panel);
 }
 
-static void oppo19696jdi_nt36672c_1080_2400_90fps_reset(struct oppo19696jdi_nt36672c_1080_2400_90fps *ctx)
+static void nt36672c_reset(struct nt36672c *ctx)
 {
 	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
 	usleep_range(10000, 11000);
@@ -37,7 +37,7 @@ static void oppo19696jdi_nt36672c_1080_2400_90fps_reset(struct oppo19696jdi_nt36
 	usleep_range(1000, 2000);
 }
 
-static int oppo19696jdi_nt36672c_1080_2400_90fps_on(struct oppo19696jdi_nt36672c_1080_2400_90fps *ctx)
+static int nt36672c_on(struct nt36672c *ctx)
 {
 	struct mipi_dsi_device *dsi = ctx->dsi;
 	struct device *dev = &dsi->dev;
@@ -520,7 +520,7 @@ static int oppo19696jdi_nt36672c_1080_2400_90fps_on(struct oppo19696jdi_nt36672c
 	return 0;
 }
 
-static int oppo19696jdi_nt36672c_1080_2400_90fps_off(struct oppo19696jdi_nt36672c_1080_2400_90fps *ctx)
+static int nt36672c_off(struct nt36672c *ctx)
 {
 	struct mipi_dsi_device *dsi = ctx->dsi;
 	struct device *dev = &dsi->dev;
@@ -548,9 +548,9 @@ static int oppo19696jdi_nt36672c_1080_2400_90fps_off(struct oppo19696jdi_nt36672
 	return 0;
 }
 
-static int oppo19696jdi_nt36672c_1080_2400_90fps_prepare(struct drm_panel *panel)
+static int nt36672c_prepare(struct drm_panel *panel)
 {
-	struct oppo19696jdi_nt36672c_1080_2400_90fps *ctx = to_oppo19696jdi_nt36672c_1080_2400_90fps(panel);
+	struct nt36672c *ctx = to_nt36672c(panel);
 	struct device *dev = &ctx->dsi->dev;
 	struct drm_dsc_picture_parameter_set pps;
 	int ret;
@@ -558,9 +558,9 @@ static int oppo19696jdi_nt36672c_1080_2400_90fps_prepare(struct drm_panel *panel
 	if (ctx->prepared)
 		return 0;
 
-	oppo19696jdi_nt36672c_1080_2400_90fps_reset(ctx);
+	nt36672c_reset(ctx);
 
-	ret = oppo19696jdi_nt36672c_1080_2400_90fps_on(ctx);
+	ret = nt36672c_on(ctx);
 	if (ret < 0) {
 		dev_err(dev, "Failed to initialize panel: %d\n", ret);
 		gpiod_set_value_cansleep(ctx->reset_gpio, 1);
@@ -587,16 +587,16 @@ static int oppo19696jdi_nt36672c_1080_2400_90fps_prepare(struct drm_panel *panel
 	return 0;
 }
 
-static int oppo19696jdi_nt36672c_1080_2400_90fps_unprepare(struct drm_panel *panel)
+static int nt36672c_unprepare(struct drm_panel *panel)
 {
-	struct oppo19696jdi_nt36672c_1080_2400_90fps *ctx = to_oppo19696jdi_nt36672c_1080_2400_90fps(panel);
+	struct nt36672c *ctx = to_nt36672c(panel);
 	struct device *dev = &ctx->dsi->dev;
 	int ret;
 
 	if (!ctx->prepared)
 		return 0;
 
-	ret = oppo19696jdi_nt36672c_1080_2400_90fps_off(ctx);
+	ret = nt36672c_off(ctx);
 	if (ret < 0)
 		dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
 
@@ -606,7 +606,7 @@ static int oppo19696jdi_nt36672c_1080_2400_90fps_unprepare(struct drm_panel *pan
 	return 0;
 }
 
-static const struct drm_display_mode oppo19696jdi_nt36672c_1080_2400_90fps_mode = {
+static const struct drm_display_mode nt36672c_mode = {
 	.clock = (1080 + 73 + 12 + 40) * (2400 + 32 + 2 + 30) * 120 / 1000,
 	.hdisplay = 1080,
 	.hsync_start = 1080 + 73,
@@ -620,12 +620,12 @@ static const struct drm_display_mode oppo19696jdi_nt36672c_1080_2400_90fps_mode 
 	.height_mm = 152,
 };
 
-static int oppo19696jdi_nt36672c_1080_2400_90fps_get_modes(struct drm_panel *panel,
+static int nt36672c_get_modes(struct drm_panel *panel,
 							   struct drm_connector *connector)
 {
 	struct drm_display_mode *mode;
 
-	mode = drm_mode_duplicate(connector->dev, &oppo19696jdi_nt36672c_1080_2400_90fps_mode);
+	mode = drm_mode_duplicate(connector->dev, &nt36672c_mode);
 	if (!mode)
 		return -ENOMEM;
 
@@ -639,16 +639,16 @@ static int oppo19696jdi_nt36672c_1080_2400_90fps_get_modes(struct drm_panel *pan
 	return 1;
 }
 
-static const struct drm_panel_funcs oppo19696jdi_nt36672c_1080_2400_90fps_panel_funcs = {
-	.prepare = oppo19696jdi_nt36672c_1080_2400_90fps_prepare,
-	.unprepare = oppo19696jdi_nt36672c_1080_2400_90fps_unprepare,
-	.get_modes = oppo19696jdi_nt36672c_1080_2400_90fps_get_modes,
+static const struct drm_panel_funcs nt36672c_panel_funcs = {
+	.prepare = nt36672c_prepare,
+	.unprepare = nt36672c_unprepare,
+	.get_modes = nt36672c_get_modes,
 };
 
-static int oppo19696jdi_nt36672c_1080_2400_90fps_probe(struct mipi_dsi_device *dsi)
+static int nt36672c_probe(struct mipi_dsi_device *dsi)
 {
 	struct device *dev = &dsi->dev;
-	struct oppo19696jdi_nt36672c_1080_2400_90fps *ctx;
+	struct nt36672c *ctx;
 	int ret;
 
 	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
@@ -669,7 +669,7 @@ static int oppo19696jdi_nt36672c_1080_2400_90fps_probe(struct mipi_dsi_device *d
 			  MIPI_DSI_MODE_NO_EOT_PACKET |
 			  MIPI_DSI_CLOCK_NON_CONTINUOUS;
 
-	drm_panel_init(&ctx->panel, dev, &oppo19696jdi_nt36672c_1080_2400_90fps_panel_funcs,
+	drm_panel_init(&ctx->panel, dev, &nt36672c_panel_funcs,
 		       DRM_MODE_CONNECTOR_DSI);
 	ctx->panel.prepare_prev_first = true;
 
@@ -708,9 +708,9 @@ static int oppo19696jdi_nt36672c_1080_2400_90fps_probe(struct mipi_dsi_device *d
 	return 0;
 }
 
-static void oppo19696jdi_nt36672c_1080_2400_90fps_remove(struct mipi_dsi_device *dsi)
+static void nt36672c_remove(struct mipi_dsi_device *dsi)
 {
-	struct oppo19696jdi_nt36672c_1080_2400_90fps *ctx = mipi_dsi_get_drvdata(dsi);
+	struct nt36672c *ctx = mipi_dsi_get_drvdata(dsi);
 	int ret;
 
 	ret = mipi_dsi_detach(dsi);
@@ -720,21 +720,21 @@ static void oppo19696jdi_nt36672c_1080_2400_90fps_remove(struct mipi_dsi_device 
 	drm_panel_remove(&ctx->panel);
 }
 
-static const struct of_device_id oppo19696jdi_nt36672c_1080_2400_90fps_of_match[] = {
+static const struct of_device_id nt36672c_of_match[] = {
 	{ .compatible = "mdss,x3-jdi-nt36672c" },
 	{ /* sentinel */ }
 };
-MODULE_DEVICE_TABLE(of, oppo19696jdi_nt36672c_1080_2400_90fps_of_match);
+MODULE_DEVICE_TABLE(of, nt36672c_of_match);
 
-static struct mipi_dsi_driver oppo19696jdi_nt36672c_1080_2400_90fps_driver = {
-	.probe = oppo19696jdi_nt36672c_1080_2400_90fps_probe,
-	.remove = oppo19696jdi_nt36672c_1080_2400_90fps_remove,
+static struct mipi_dsi_driver nt36672c_driver = {
+	.probe = nt36672c_probe,
+	.remove = nt36672c_remove,
 	.driver = {
 		.name = "panel-novatek-nt36672c",
-		.of_match_table = oppo19696jdi_nt36672c_1080_2400_90fps_of_match,
+		.of_match_table = nt36672c_of_match,
 	},
 };
-module_mipi_dsi_driver(oppo19696jdi_nt36672c_1080_2400_90fps_driver);
+module_mipi_dsi_driver(nt36672c_driver);
 
 MODULE_AUTHOR("Patriot-06 <mbmc172@gmail.com>");
 MODULE_DESCRIPTION("DRM driver for NOVATEK JDI NT36672C panel with DSC");
